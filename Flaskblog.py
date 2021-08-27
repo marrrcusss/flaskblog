@@ -1,7 +1,10 @@
 # save this as app.py
 from flask import Flask, escape, request, render_template, url_for
+from forms import FormularioRegistro, FormularioLogin
 
 app = Flask(__name__)
+
+app.config['SECRET-KEY']='3d0501d196d4dcf0cbda38ad11'
 
 posts = [
     {
@@ -23,10 +26,19 @@ posts = [
 def home():
     return render_template('home.html', posts=posts)
 
-@app.route('/about')
+@app.route('/sobre')
 def about():
-    return render_template('about.html', title='About')
+    return render_template('about.html', title='Sobre')
 
+@app.route('/registro')
+def register():
+    from = FormularioRegistro()
+    return render_template('register.html', title='Registre-se', form=form)
+
+@app.route('/login')
+def login():
+    from = FormularioLogin()
+    return render_template('login.html', title='Login', form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
