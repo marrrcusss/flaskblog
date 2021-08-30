@@ -1,10 +1,10 @@
 # save this as app.py
-from flask import Flask, escape, request, render_template, url_for
+from flask import Flask, escape, request, render_template, url_for, flash, redirect
 from forms import FormularioRegistro, FormularioLogin
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '3d0501d196d4dcf0cbd3a38ad11'
 
-app.config['SECRET-KEY']='3d0501d196d4dcf0cbda38ad11'
 
 posts = [
     {
@@ -30,14 +30,18 @@ def home():
 def about():
     return render_template('about.html', title='Sobre')
 
-@app.route('/registro')
+@app.route('/registro', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    from = FormularioRegistro()
-    return render_template('register.html', title='Registre-se', form=form)
+    form = FormularioRegistro()
+        if form.validate_on_submit():
+            flash(f'Conta criada para {form.username.data}!', 'success')
+            return redirect(url_for('home'))
+    return render_template('register.html', title="Register", form=form)
 
 @app.route('/login')
 def login():
-    from = FormularioLogin()
+    form = FormularioLogin()
     return render_template('login.html', title='Login', form=form)
 
 if __name__ == '__main__':
